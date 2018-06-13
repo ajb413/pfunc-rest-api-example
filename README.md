@@ -1,14 +1,14 @@
 # Build a REST API in 5 minutes with PubNub
 
-Step by step guide [hosted here](#) on the PubNub blog. [PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example) is forever free to try.
+**Step by step guide** [hosted here](#) on the PubNub blog. [PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example) is forever free to try.
 
 PubNub Functions are JavaScript event handlers that can be executed on in-transit PubNub messages, or in the request/response style of a RESTful API over HTTPS.
 
-Deploying code can be done on the command line using the `pubnub-cli` on npm and also via CI/CD like [in this tutorial](https://www.pubnub.com/blog/ci-cd-deploy-pubnub-functions-cli/?devrel_gh=pfunc-rest-api-example).
+Deploying code can be done on the command line using the `pubnub-cli` on npm and also **via CI/CD** like [in this tutorial](https://www.pubnub.com/blog/ci-cd-deploy-pubnub-functions-cli/?devrel_gh=pfunc-rest-api-example).
 
 For deploying using your command line, see [this tool](https://www.pubnub.com/docs/blocks/cli-api?devrel_gh=pfunc-rest-api-example).
 
-PubNub Functions are serverless, there is no need to worry about deploying, maintaining, or scaling server infrastructure. We have several points of presence around the world in which your code is deployed simeltaneously. This ensures that your users have an extremely low latency experience, regardless of their location.
+PubNub Functions are serverless, there is **no need to worry about deploying, maintaining, or scaling server infrastructure**. We have several points of presence around the world in which your code is **deployed simultaneously**. This ensures that your users have an **extremely low latency** experience, **regardless of their location**.
 
 ## REST API
 
@@ -137,13 +137,13 @@ Up to 3 `xhr` requests can be made in 1 event handler execution. They can be cha
 
 ```javascript
 controllers.kitty.get = () => {
-        const url = 'http://thecatapi.com/api/images/get?results_per_page=1';
-        return xhr.fetch(url).then((result) => {
-            response.status = 302;
-            response.headers['Location'] = result.url;
-            return response.send();
-        });
-    }
+    const url = 'http://thecatapi.com/api/images/get?results_per_page=1';
+    return xhr.fetch(url).then((result) => {
+        response.status = 302;
+        response.headers['Location'] = result.url;
+        return response.send();
+    });
+}
 ```
 
 Also an API request that needs secret API keys can be properly implemented in Functions using [vault](https://www.pubnub.com/docs/blocks/vault-module?devrel_gh=pfunc-rest-api-example). Add secret keys to the module by clicking **MY SECRETS** in the event handler editor page.
