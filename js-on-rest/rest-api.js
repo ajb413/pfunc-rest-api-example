@@ -117,7 +117,7 @@ export default (request, response) => {
             // Update the user name attribute of the account object
             accountData.user_name = userName;
 
-            // Set value with TTL of 7 days, 32KB per entry.
+            // Set value with TTL of 7 days, 32KB max per entry.
             return db.set(`account-${id}`, accountData, 10080);
         }).then(() => {
             // Helper function defined earlier

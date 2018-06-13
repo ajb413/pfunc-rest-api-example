@@ -1,14 +1,18 @@
 # Build a REST API in 5 minutes with PubNub
 
-Step by step guide [hosted here](#). PubNub is forever free to try.
+Step by step guide [hosted here](#). [PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example) is forever free to try.
 
-PubNub Functions are JavaScript event handlers that can be executed on in-transit PubNub messages, or in the request/response style of a RESTful API over HTTPS. Deploying code can be done on the command line using the `pubnub-cli` on npm and also via CI/CD like [in this tutorial](https://www.pubnub.com/blog/ci-cd-deploy-pubnub-functions-cli/?devrel_gh=pfunc-rest-api-example).
+PubNub Functions are JavaScript event handlers that can be executed on in-transit PubNub messages, or in the request/response style of a RESTful API over HTTPS.
+
+Deploying code can be done on the command line using the `pubnub-cli` on npm and also via CI/CD like [in this tutorial](https://www.pubnub.com/blog/ci-cd-deploy-pubnub-functions-cli/?devrel_gh=pfunc-rest-api-example).
+
+For deploying using your command line, see [this tool](https://www.pubnub.com/docs/blocks/cli-api?devrel_gh=pfunc-rest-api-example).
 
 PubNub Functions are serverless, there is no need to worry about deploying, maintaining, or scaling server infrastructure. We have several points of presence around the world in which your code is deployed simeltaneously. This ensures that your users have an extremely low latency experience, regardless of their location.
 
 ## REST API
 
-You can build a REST API with Functions and deploy it with 1 button click. **Create a forever free account [at PubNub](#)** and click the Functions tab in the dashboard. Create a module and an event handler with the type `on request`.
+You can build a REST API with Functions and deploy it with 1 button click. **Create a forever free account [at PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example)** and click the Functions tab in the dashboard. Create a module and an event handler with the type `on request`.
 
 Press the play button on the right and use the UI on the left for making test **GET, POST, PUT,** and **DELETE** requests.
 
@@ -90,7 +94,7 @@ controllers.account.put = () => {
         // Update the user name attribute of the account object
         accountData.user_name = userName;
 
-        // Set value with TTL of 7 days, 32KB per entry.
+        // Set value with TTL of 7 days, 32KB max per entry.
         return db.set(`account-${id}`, accountData, 10080);
     }).then(() => {
         // Helper function defined earlier
@@ -128,6 +132,9 @@ controllers.index.get = () => {
 ```
 
 ## Proxy one or many external API requests
+
+Up to 3 `xhr` requests can be made in 1 event handler execution. They can be chained using JavaScript promises.
+
 ```javascript
 controllers.kitty.get = () => {
         const url = 'http://thecatapi.com/api/images/get?results_per_page=1';
@@ -139,7 +146,7 @@ controllers.kitty.get = () => {
     }
 ```
 
-Also an API request that needs secret API keys can be properly implemented in Functions using [vault](#). Add secret keys to the module by clicking "MY SECRETS" in the event handler editor page.
+Also an API request that needs secret API keys can be properly implemented in Functions using [vault](https://www.pubnub.com/docs/blocks/vault-module?devrel_gh=pfunc-rest-api-example). Add secret keys to the module by clicking **MY SECRETS** in the event handler editor page.
 
 ```javascript
 const xhr = require('xhr');
