@@ -1,6 +1,6 @@
 # Build a REST API in 5 minutes with PubNub
 
-Step by step guide [hosted here](#). [PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example) is forever free to try.
+Step by step guide [hosted here](#) on the PubNub blog. [PubNub](https://dashboard.pubnub.com/signup?devrel_gh=pfunc-rest-api-example) is forever free to try.
 
 PubNub Functions are JavaScript event handlers that can be executed on in-transit PubNub messages, or in the request/response style of a RESTful API over HTTPS.
 
