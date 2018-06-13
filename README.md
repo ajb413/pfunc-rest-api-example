@@ -16,6 +16,12 @@ You can build a REST API with Functions and deploy it with 1 button click. **Cre
 
 Press the play button on the right and use the UI on the left for making test **GET, POST, PUT,** and **DELETE** requests.
 
+![PubNub Functions Test HTTP Request Button](https://i.imgur.com/a2KNv4w.png)
+
+The **COPY URL** button on the left gives you the public URL that this API is hosted. The ending path can be adjusted but the URL itself is static and immutable.
+
+![PubNub Functions On Request Handler](https://i.imgur.com/it1L2Tm.png)
+
 ## Examples
 The event handler in this repo shows how to turn this event handler into an API. There is a `controllers` object that points to a JavaScript function for each `route` URL parameter based on the HTTP method used (like GET, POST, PUT, and DELETE).
 
