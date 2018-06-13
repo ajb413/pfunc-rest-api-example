@@ -74,6 +74,7 @@ export default (request, response) => {
 // Example: CRUD REST API
 // TODO: Add request validation logic for all routes.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // Read an account object from the DB by its `id`.
     controllers.account.get = () => {
         // TODO: Check that user is authorized and validate `params`.
         const id = request.params.id;
@@ -85,12 +86,13 @@ export default (request, response) => {
         });
     };
 
+    // Creates an account object from the POST request body
     controllers.account.post = () => {
         // TODO: Check that user is authorized and validate `body`.
         const id = body.id;
         const accountData = body.account_data;
 
-        // Set value with TTL of 7 days, 32KB per entry.
+        // Set value with TTL of 7 days, 32KB max per entry.
         return db.set(`account-${id}`, accountData, 10080)
         .then(() => {
             // Helper function defined earlier
@@ -101,6 +103,7 @@ export default (request, response) => {
         });
     };
 
+    // Update the user name attribute of the account object
     controllers.account.put = () => {
         // TODO: Check that user is authorized and validate `body`.
         const id = body.id;
@@ -125,12 +128,13 @@ export default (request, response) => {
         });
     };
 
+    // Destroy an account object specified by `id`
     controllers.account.delete = () => {
         // TODO: Check that user is authorized and validate `params`.
         const id = request.params.id;
 
-        // Delete value with TTL of 7 days.
-        return db.set(`account-${id}`, null, 10080)
+        // Delete value by setting it to null.
+        return db.set(`account-${id}`, null)
         .then(() => {
             // Helper function defined earlier
             return ok();
@@ -148,6 +152,8 @@ export default (request, response) => {
 // Example: State Counter
 // TODO: Request validation.
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+    // Get the value of a counter by `id`
+    // increment counter if a param of `increment` is equal to true
     controllers.counter.get = () => {
         const id = request.params.id;
 
@@ -176,13 +182,13 @@ export default (request, response) => {
 
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 // Example: Query an external API
-// You can even use secret credentials with the vault module
+// You can use secret API credentials with the vault module
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
     controllers.kitty.get = () => {
         const url = 'http://thecatapi.com/api/images/get?results_per_page=1';
 
         // Store a top secret key by clicking the 'MY SECRETS'
-        // button on the right. Get it mid-execution with `vault.get`.
+        // button on the left. Get it mid-execution with `vault.get`.
 
         // return vault.get('secret_api_key').then((apiKey) => {
             return xhr.fetch(url, {
