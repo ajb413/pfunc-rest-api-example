@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>REST API Examples</title>
+</head>
+
+<body>
+    <input type="radio" name="selection" value="html_get">
+    <label for="html_get">GET HTML Response</label>
+    <br>
+    <input type="radio" name="selection" value="get_account">
+    <label for="get_account">GET Account id: 1</label>
+    <br>
+    <input type="radio" name="selection" value="post_account">
+    <label for="post_account">POST Account id: 1</label>
+    <br>
+    <input type="radio" name="selection" value="put_account">
+    <label for="put_account">PUT Account id: 1, update user_name property</label>
+    <br>
+    <input type="radio" name="selection" value="delete_account">
+    <label for="delete_account">DELETE Account id: 1</label>
+    <br>
+    <input type="radio" name="selection" value="get_counter">
+    <label for="get_counter">GET counter id: c1</label>
+    <br>
+    <input type="radio" name="selection" value="inc_counter">
+    <label for="inc_counter">GET increment counter id: c1</label>
+    <br>
+    <input type="radio" name="selection" value="cat">
+    <label for="cat">GET a random cat picture</label>
+    <br>
+    <input type="radio" name="selection" value="get_200">
+    <label for="get_200">GET 200</label>
+    <br>
+    <input id="sendRequest" type="submit" value="Send Request">
+    <br>
+    <br>
+    <b><label>REQUEST:</label></b>
+    <p id="request"></p>
+    <br>
+    <br>
+    <b><label>RESPONSE:</label></b>
+    <p id="response"></p>
+</body>
+
+<script type="text/javascript">
+
+// Use the COPY URL button in the PubNub Functions editor to get this URL
+const pfuncURL = '__YOUR_API_URL_HERE__';
+
+/**
+ * Make an HTTP request wrapped in an ES6 Promise.
+ *
+ * @param {String} url URL of the resource that is being requested.
+ * @param {Object} options JSON Object with HTTP request options, "header"
+ *     Object of possible headers to set, and a body Object of a request body.
+ *
+ * @return {Promise} Resolves a parsed JSON Object or String response text if
+ *     the response code is in the 200 range. Rejects with response status text
+ *     when the response code is outside of the 200 range.
+ */
+function request(url, method, options) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    let contentTypeIsSet = false;
+    options = options || {};
+
+    xhr.open(method, url);
+
+    for (let header in options.headers) {
+      if ({}.hasOwnProperty.call(options.headers, header)) {
+        header = header.toLowerCase();
+        contentTypeIsSet = header === 'content-type' ? true : contentTypeIsSet;
+        xhr.setRequestHeader(header, options.headers[header]);
+      }
+    }
+
+    if (!contentTypeIsSet) {
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    }
+
+    xhr.onload = function() {
+      if (xhr.status >= 200 && xhr.status < 300 ) {
+        let response;
+
+        try {
+          response = JSON.parse(xhr.response);
+        } catch (e) {
+          response = xhr.response;
+        }
+
+        resolve(response);
+      } else {
+        reject({
+            status: xhr.status,
+            statusText: xhr.statusText,
+        });
+      }
+    };
+
+    xhr.send(JSON.stringify(options.body));
+  });
+}
+
+function getCheckedValue(groupName) {
+    let radios = document.getElementsByName(groupName);
+    for (let i = 0; i < radios.length; i++ ) {
+        if (radios[i].checked) {
+            return radios[i].value;
+        }
+    }
+    return null;
+}
+
+function response(res) {
+    let text;
+    try {
+        text = JSON.stringify(res);
+    } catch (e) {
+        text = res;
+    }
+    responseDisplay.textContent = text;
+}
+
+let submit = document.getElementById('sendRequest');
+let requestDisplay = document.getElementById('request');
+let responseDisplay = document.getElementById('response');
+
+submit.addEventListener("click", function() {
+    let value = getCheckedValue("selection");
+
+    switch(value) {
+        case "html_get":
+            var url = pfuncURL + '?route=index';
+            requestDisplay.innerHTML = url;
+            request(url, 'GET').then(response);
+            break;
+
+
+        case "get_account":
+            var url = pfuncURL + '?route=account&id=1';
+            requestDisplay.innerHTML = url;
+            request(url, 'GET').then(response);
+            break;
+
+
+        case "post_account":
+            var url = pfuncURL + '?route=account';
+            var body = {
+              "id": 1,
+              "account_data": {
+                "user_name": "Bob",
+                "money": 7
+              }
+            };
+            requestDisplay.innerHTML = url + '<br><br>' + JSON.stringify(body);
+            request(url, 'POST', { body }).then(response);
+            break;
+
+
+        case "put_account":
+            var url = pfuncURL + '?route=account';
+            var body = {
+              "id": 1,
+              "user_name": "Tom"
+            };
+            requestDisplay.innerHTML = url + '<br><br>' + JSON.stringify(body);
+            request(url, 'PUT', { body }).then(response);
+            break;
+
+
+        case "delete_account":
+            var url = pfuncURL + '?route=account&id=1';
+            requestDisplay.innerHTML = url;
+            request(url, 'DELETE').then(response);
+            break;
+
+
+        case "get_counter":
+            var url = pfuncURL + '?route=counter&id=c1';
+            requestDisplay.innerHTML = url;
+            request(url, 'GET').then(response);
+            break;
+
+
+        case "inc_counter":
+            var url = pfuncURL + '?route=counter&id=c1&increment=true';
+            requestDisplay.innerHTML = url;
+            request(url, 'GET').then(response);
+            break;
+
+
+        case "cat":
+            var url = pfuncURL + '?route=kitty';
+            window.location.assign(url);
+            break;
+
+
+        case "get_200":
+            var url = pfuncURL;
+            requestDisplay.innerHTML = url;
+            request(url, 'GET').then(response);
+            break;
+    }
+});
+</script>
+
+</html>
